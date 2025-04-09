@@ -4,7 +4,7 @@ import { Readable } from "node:stream";
 import fetch from 'node-fetch';
 import { handleTokenExchange } from "./modules/exchangeController.js";
 import util from 'util';
-import logger from "./modules/logger.js";
+import { logger } from './modules/logger.js';
 
 // Set up the Express app
 const app = express()

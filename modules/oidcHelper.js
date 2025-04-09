@@ -1,7 +1,7 @@
 import jwksClient from 'jwks-rsa';
 import dotenv from 'dotenv';
 import util from 'util';
-import logger from './logger.js';
+import { logger, formatDebug } from './logger.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -43,44 +43,43 @@ async function isValidJWT(payload) {
     const ACTOR = process.env.ACTOR || "https://api.githubcopilot.com";
 
     const now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
-    logger.debug("\t payload.aud: " + payload.aud);
 
     // Validate audience (aud)
-    logger.debug("\t audience (aud): " + payload.aud);
+    logger.debug(formatDebug("aud (Copilot App client id)", payload.aud));
     if (payload.aud !== GITHUB_APP_CLIENT_ID) {
         throw new Error(`Invalid audience (aud). Expected: ${GITHUB_APP_CLIENT_ID}, Received: ${payload.aud}`);
     }
 
     // Validate subject (sub)
-    logger.debug("\t subject (sub): " + payload.sub);
+    logger.debug(formatDebug("sub (Requester GitHub user id)", payload.sub));
     if (!payload.sub || typeof payload.sub !== "string") {
         throw new Error("Invalid subject (sub). It must be a non-empty string.");
     }
 
     // Validate issued at (iat)
-    logger.debug("\t issued at (iat): " + payload.iat);
+    logger.debug(formatDebug("iat (issued at)", payload.iat));
     if (!payload.iat || typeof payload.iat !== "number" || payload.iat > now) {
         // Debug statement for iat validation
         const iatDate = new Date(payload.iat * 1000).toISOString(); // Convert iat to human-readable format
         const nowDate = new Date(now * 1000).toISOString(); // Convert current timestamp to human-readable format
-        logger.debug(`Debugging iat validation: payload.iat=${payload.iat} (${iatDate}), now=${now} (${nowDate}), isFuture=${payload.iat > now}`);
+        logger.debug(`\t iat validation: payload.iat=${iatDate}, now=${nowDate}, isFuture=${payload.iat > now}`);
         throw new Error("Invalid issued at (iat). It must be a timestamp in the past.");
     }
 
     // Validate not before (nbf)
-    logger.debug("\t not before (nbf): " + payload.nbf);
+    logger.debug(formatDebug("nbf (not before)", payload.nbf));
     if (!payload.nbf || typeof payload.nbf !== "number" || payload.nbf > now) {
         throw new Error("Invalid not before (nbf). It must be a timestamp in the past.");
     }
 
     // Validate expiration time (exp)
-    logger.debug("\t expiration time (exp): " + payload.exp);
+    logger.debug(formatDebug("exp (expiration time)", payload.exp));
     if (!payload.exp || typeof payload.exp !== "number" || payload.exp <= now) {
         throw new Error("Invalid expiration time (exp). It must be a timestamp in the future.");
     }
 
     // Validate actor (act)
-    logger.debug("\t actor (act): "+ util.inspect(payload.act));
+    logger.debug(formatDebug("act (identify token purpose)", util.inspect(payload.act)));
     if (!payload.act || payload.act.sub !== ACTOR) {
         throw new Error("Invalid actor (act). Expected: "+ ACTOR +", Received: " + payload.act.sub);
     }

@@ -15,5 +15,11 @@ const logger = pino({
 });
 
 
-// Export the logger instance
-export default logger;
+// Helper function to format debug output
+const formatDebug = (label, value) => {
+    const labelWidth = 30; // Adjust the width as needed
+    return label.padEnd(labelWidth, ' ') + ": " + value;
+};
+
+// Export the logger and the formatDebug function
+export { logger, formatDebug };

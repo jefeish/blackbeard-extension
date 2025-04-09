@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { getSigningKey, isValidJWT } from './oidcHelper.js';
 import util from 'util';
-import logger from './logger.js';
+import { logger } from './logger.js';
 
 /**
  * @description Handles the token exchange request.
