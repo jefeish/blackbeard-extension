@@ -176,6 +176,3 @@ dist
 
 # Fly.io config
 fly.toml
-
-# ignore the test/ directory
-test/
