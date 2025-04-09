@@ -99,7 +99,6 @@ app.post("/", express.json(), async (req, res) => {
  * @description Endpoint to handle token exchange requests
  * @route POST /exchange
  */
-// Token exchange endpoint
 app.post('/exchange', handleTokenExchange);
 
 const port = Number(process.env.PORT || '3000')
