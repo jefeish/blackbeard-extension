@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 /**
- * @description Handles the token exchange request.
+ * @description Handles the Copilot Chat request.
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  */

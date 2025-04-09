@@ -11,7 +11,11 @@ const jwks = jwksClient({
     jwksUri: 'https://github.com/login/oauth/.well-known/jwks.json'
 });
 
-// Helper function to retrieve signing key
+/**
+ * @description Helper function to retrieve signing key
+ * @param {*} header 
+ * @returns 
+ */
 async function getSigningKey(header) {
     return new Promise((resolve, reject) => {
         jwks.getSigningKey(header.kid, (err, key) => {
@@ -27,7 +31,7 @@ async function getSigningKey(header) {
 }
 
 /**
- * Validates a JWT payload for required fields.
+ * @description Validates a JWT payload for required fields.
  * @param {Object} payload - The decoded JWT payload.
  * @param {string} clientId - The expected audience (aud) value (your Copilot Extension's client ID).
  * @returns {boolean} - Returns true if the JWT is valid, otherwise throws an error.

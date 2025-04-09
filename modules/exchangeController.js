@@ -4,7 +4,7 @@ import util from 'util';
 import logger from './logger.js';
 
 /**
- * Handles the token exchange request.
+ * @description Handles the token exchange request.
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  */
