@@ -1,7 +1,6 @@
 import { Octokit } from "@octokit/core";
 import express from "express";
 import { Readable } from "node:stream";
-import fetch from 'node-fetch';
 import { handleTokenExchange } from "./modules/exchangeController.js";
 import util from 'util';
 import { logger } from './modules/logger.js';
@@ -51,7 +50,6 @@ app.post("/", express.json(), async (req, res) => {
             logger.error("Invalid payload: " + payload);
             return res.status(400).json({ error: "invalid_payload" });
         }
-        // logger.info("Payload: "+ payload);
 
         // Insert pirate-y system messages
         const messages = payload.messages;
@@ -61,7 +59,7 @@ app.post("/", express.json(), async (req, res) => {
         });
         messages.unshift({
             role: "system",
-            content: `Start every response with the user's name, which is @${user.data.login}`,
+            content: "Start every response with the user's name, which is @${user.data.login}",
         });
 
         // Call Copilot's LLM API
@@ -96,7 +94,7 @@ app.post("/", express.json(), async (req, res) => {
 });
 
 /**
- * @description Endpoint to handle token exchange requests
+ * @description Endpoint to handle token exchange requests (OIDC token exchange)
  * @route POST /exchange
  */
 app.post('/exchange', handleTokenExchange);
