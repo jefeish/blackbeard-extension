@@ -33,7 +33,6 @@ async function getSigningKey(header) {
 /**
  * @description Validates a JWT payload for required fields.
  * @param {Object} payload - The decoded JWT payload.
- * @param {string} clientId - The expected audience (aud) value (your Copilot Extension's client ID).
  * @returns {boolean} - Returns true if the JWT is valid, otherwise throws an error.
  */
 async function isValidJWT(payload) {
