@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { getSigningKey, isValidJWT } from './oidcHelper.js';
-import util from 'util';
 import { logger } from './logger.js';
 
 /**
@@ -14,7 +13,7 @@ export async function handleTokenExchange(req, res) {
 
     try {
         // Log the request headers
-        logger.debug("Request Headers '/exchange': " + util.inspect(req.headers, { depth: null, colors: true }));
+        logger.debug("Request Headers '/exchange': " + JSON.stringify(req.headers, null, 2));
 
         // Parse the request body for token exchange parameters
         const { subject_token, subject_token_type, grant_type } = req.body;
@@ -55,7 +54,7 @@ export async function handleTokenExchange(req, res) {
             const payload = jwt.verify(subject_token, signingKey, {
                 algorithms: ["RS256"], // Specify the algorithm used to sign the token
             });
-            logger.debug("Token Payload: " + util.inspect(payload));
+            logger.debug("Token Payload: " + JSON.stringify(payload, null, 2));
 
             await isValidJWT(payload);
             logger.info("JWT is valid");
@@ -76,7 +75,7 @@ export async function handleTokenExchange(req, res) {
             scope: "read write", // Adjust the scope as needed
         };
 
-        logger.debug("Exchanged Token: " + util.inspect(exchangedToken));
+        logger.debug("Exchanged Token: " + JSON.stringify(exchangedToken));
         logger.info("Token exchange successful");
 
         // Respond with the exchanged token

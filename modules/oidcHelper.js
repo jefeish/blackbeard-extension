@@ -1,6 +1,5 @@
 import jwksClient from 'jwks-rsa';
 import dotenv from 'dotenv';
-import util from 'util';
 import { logger, formatDebug } from './logger.js';
 
 // Load environment variables from .env file
@@ -40,7 +39,7 @@ async function isValidJWT(payload) {
 
     // Optional: Retrieve the validation data from the environment
     const GITHUB_APP_CLIENT_ID = process.env.GITHUB_APP_CLIENT_ID
-    const ACTOR = process.env.ACTOR || "https://api.githubcopilot.com";
+    const ACTOR = "https://api.githubcopilot.com";
 
     const now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
 
@@ -79,7 +78,7 @@ async function isValidJWT(payload) {
     }
 
     // Validate actor (act)
-    logger.debug(formatDebug("act (identify token purpose)", util.inspect(payload.act)));
+    logger.debug(formatDebug("act (identify token purpose)", JSON.stringify(payload.act)));
     if (!payload.act || payload.act.sub !== ACTOR) {
         throw new Error("Invalid actor (act). Expected: "+ ACTOR +", Received: " + payload.act.sub);
     }
