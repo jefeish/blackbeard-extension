@@ -38,17 +38,20 @@ async function isValidJWT(payload) {
     logger.info("Validating JWT payload");
 
     // Optional: Retrieve the validation data from the environment
-    const GITHUB_APP_CLIENT_ID = process.env.GITHUB_APP_CLIENT_ID
+    const GITHUB_APP_CLIENT_ID = process.env.GITHUB_APP_CLIENT_ID || null;
     const ACTOR = "https://api.githubcopilot.com";
 
     const now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
 
     // Validate audience (aud)
     logger.debug(formatDebug("aud (Copilot App client id)", payload.aud));
-    if (payload.aud !== GITHUB_APP_CLIENT_ID) {
-        throw new Error(`Invalid audience (aud). Expected: ${GITHUB_APP_CLIENT_ID}, Received: ${payload.aud}`);
+    // only validate the client id if it is set
+    if (GITHUB_APP_CLIENT_ID) {
+        if (payload.aud !== GITHUB_APP_CLIENT_ID) {
+            throw new Error(`Invalid audience (aud). Expected: ${GITHUB_APP_CLIENT_ID}, Received: ${payload.aud}`);
+        }
     }
-
+        
     // Validate subject (sub)
     logger.debug(formatDebug("sub (Requester GitHub user id)", payload.sub));
     if (!payload.sub || typeof payload.sub !== "string") {
