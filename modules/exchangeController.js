@@ -61,19 +61,25 @@ export async function handleTokenExchange(req, res) {
 
         } catch (error) {
             logger.error("JWT verification failed: " + error.message);
-            return res.status(400).json({ error: "internal_server_error" });
+            return res.status(400).json({ "error": "invalid_request" });
         }
 
         // -------------------------------------------------
         // Insert your access_token generation logic here
         // -------------------------------------------------
 
+        // const exchangedToken = {
+        //     access_token: "newly_exchanged_token_value", // Replace with actual token generation logic
+        //     token_type: "Bearer",
+        //     expires_in: 120, // Token expiration time in seconds
+        //     scope: "read write", // Adjust the scope as needed
+        // };
         const exchangedToken = {
-            access_token: "newly_exchanged_token_value", // Replace with actual token generation logic
-            token_type: "Bearer",
-            expires_in: 120, // Token expiration time in seconds
-            scope: "read write", // Adjust the scope as needed
-        };
+            "access_token": "newly_exchanged_token_value", // Replace with actual generated token 
+            "Issued_token_type":"urn:ietf:params:oauth:token-type:access_token",
+            "token_type": "Bearer",
+            "expires_in": 120
+          }
 
         logger.debug("Exchanged Token: " + JSON.stringify(exchangedToken));
         logger.info("Token exchange successful");
@@ -82,6 +88,6 @@ export async function handleTokenExchange(req, res) {
         return res.status(200).json(exchangedToken);
     } catch (error) {
         logger.error("Internal server error during token exchange: " + error);
-        return res.status(500).json({ error: "internal_server_error" });
+        return res.status(500).json({ "error": "invalid_request" });
     }
 }
